@@ -73,3 +73,39 @@ spec:
     app: mongo
   ports:
   - port: 27017
+---
+#twtapp
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: twtapp
+spec:
+  selector:
+    app: twt
+  replicas: 2
+  template:   # PodTemplate
+    metadata:
+      name: javaapp
+      labels:
+        app: twt
+    spec:
+      containers:
+      - name: webapp
+        image: devopspatemf2021/twtwebapp_real
+        ports:
+        - containerPort: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:                                                                                                                         
+  name: twtappsvc                                                                                                                 
+spec:                                                                                                                             
+  type: NodePort                                                                                                                  
+  selector:                                                                                                                       
+    app: twt                                                                                                                      
+  ports:                                                                                                                          
+  - port: 80                                                                                                                      
+    targetPort: 8080                                                                                                              
+    nodePort: 30500 #30000 – 32676                                                                                                
+
+
